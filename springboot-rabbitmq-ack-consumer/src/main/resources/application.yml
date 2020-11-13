@@ -1,0 +1,19 @@
+spring:
+  rabbitmq:
+    host: 172.16.121.145   # 172.16.121.145  / 192.168.7.130
+    port: 5672
+    username: lishuai
+    password: lishuai
+    virtual-host: /sbt
+    publisher-confirms: true
+    listener:
+      direct:
+        acknowledge-mode: manual  #acknowledgeMode设置为手动模式
+        prefetch: 100 #表示消费端每次从mq拉取一条消息来消费，直到手动确认消费完毕后，才会继续拉取下一条消息
+      simple:
+        acknowledge-mode: manual #acknowledgeMode设置为手动模式(NONE,MANUAL,AUTO)
+        concurrency: 1   #当前监听容器数
+        max-concurrency: 1  #最大数
+        retry:
+          enabled: true  #是否支持重试
+        prefetch: 100  #表示消费端每次从mq拉取一条消息来消费，直到手动确认消费完毕后，才会继续拉取下一条消息
