@@ -1,0 +1,4 @@
+# springboot-rabbitmq
+springboot整合rabbitmq的demo
+最好使用docker来创建rabbitmq，这样会轻松一些
+如果使用docker 有问题可以百度或者发邮件给我 lsdark_cl@foxmail.com
