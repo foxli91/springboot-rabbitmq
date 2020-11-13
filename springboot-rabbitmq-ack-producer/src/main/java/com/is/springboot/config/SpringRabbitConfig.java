@@ -5,6 +5,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author li-shuai
  * @Description //todo
@@ -17,6 +20,7 @@ public class SpringRabbitConfig {
 
     public static final String QUEUE_NAME="sbt_ack_alibaba_queue";
     private static final String QUEUE_NAME_M="sbt_ack_ms_queue";
+    public static final String TTL_QUEUE="sbt_ack_ttl_queue";
     // 交换机
     @Bean("bootExchange")
     public Exchange  createExchange(){
@@ -47,6 +51,39 @@ public class SpringRabbitConfig {
     public Binding bindingMsQueue(@Qualifier("msQueue") Queue queue, @Qualifier("bootExchange") Exchange exchange){
 
         return BindingBuilder.bind(queue).to(exchange).with("direct").noargs();
+    }
+    /***
+     * Description ttl 的队列，里面的map就是对于的配置参数
+     * @param
+     * @return org.springframework.amqp.core.Queue
+     * @author li-shuai
+     * @date 13:15 2020/11/13
+     */
+    @Bean("test_ttl_queue")
+    public Queue createTtlQueue(){
+        /**
+         x-message-ttl                  Number
+         x-expires                      Number
+         x-max-length                   Number
+         x-max-length-bytes             Number
+         x-overflow                     String
+         x-dead-letter-exchange         String
+         x-dead-letter-routing-key      String
+         x-single-active-consumer       Boolean
+         x-max-priority                 Number
+         x-queue-mode   (lazy)          String
+         x-queue-master-locator         String
+         */
+        Map<String,Object> map=new HashMap<>(11);
+        // 设置过期时间为10秒
+        map.put("x-message-ttl",Integer.valueOf(10000));
+        return QueueBuilder.durable(TTL_QUEUE).withArguments(map).build();
+    }
+
+    @Bean
+    public Binding bindingTtlQueue(@Qualifier("test_ttl_queue") Queue queue, @Qualifier("bootExchange") Exchange exchange){
+
+      return   BindingBuilder.bind(queue).to(exchange).with("ttl").noargs();
     }
 
 }

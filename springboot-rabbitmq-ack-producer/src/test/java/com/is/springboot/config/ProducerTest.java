@@ -89,5 +89,37 @@ public class ProducerTest {
 
     }
 
+    @Test
+    public void sendMessageToTtl() {
+        template.setConfirmCallback(new RabbitTemplate.ConfirmCallback() {
+            /***
+             * Description confirm
+             * @param correlationData 相关配置信息
+             * @param ack 交换机是否成功收到消息，true表示成功，false表示失败
+             * @param cause  失败的原因
+             */
+            @Override
+            public void confirm(CorrelationData correlationData, boolean ack, String cause) {
+                System.out.println("confirm方法被执行了");
+                System.out.println("配置信息:" + correlationData);
+                System.out.println("是否成功" + ack);
+                if (ack) {
+                    System.out.println("发送成功了");
+                    System.out.println("失败的原因" + cause);
+                } else {
+                    System.out.println("发送失败了");
+                    System.out.println("失败的原因" + cause);
+                }
+            }
+        });
+        for (int i = 0; i <1000 ; i++) {
 
+            template.convertAndSend(SpringRabbitConfig.TOPIC_EXCHANGE_NAME , "ttl", "[i="+i+" ]ack发送了 172.16.121.145 测试");
+           /* try {
+                TimeUnit.SECONDS.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }*/
+        }
+    }
 }
