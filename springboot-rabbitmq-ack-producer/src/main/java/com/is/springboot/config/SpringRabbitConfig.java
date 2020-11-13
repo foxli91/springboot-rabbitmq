@@ -75,8 +75,8 @@ public class SpringRabbitConfig {
          x-queue-master-locator         String
          */
         Map<String,Object> map=new HashMap<>(11);
-        // 设置过期时间为10秒
-        map.put("x-message-ttl",Integer.valueOf(10000));
+        // 设置过期时间为100秒
+        map.put("x-message-ttl",Integer.valueOf(100000));
         return QueueBuilder.durable(TTL_QUEUE).withArguments(map).build();
     }
 
