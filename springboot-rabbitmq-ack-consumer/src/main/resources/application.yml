@@ -1,6 +1,6 @@
 spring:
   rabbitmq:
-    host: 172.16.121.145   # 172.16.121.145  / 192.168.7.130
+    host: 192.168.7.130   # 172.16.121.145  / 192.168.7.130
     port: 5672
     username: lishuai
     password: lishuai
